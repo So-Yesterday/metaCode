@@ -1,0 +1,20 @@
+plugins {
+    id 'java'
+}
+
+group 'org.springframework'
+version '5.2.10.RELEASE'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    //添加测试模块依赖
+    compile(project(":spring-context"))
+    compile(project(":spring-beans"))
+    compile(project(":spring-core"))
+    compile(project(":spring-aop"))
+    compile(project(":spring-instrument"))
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
