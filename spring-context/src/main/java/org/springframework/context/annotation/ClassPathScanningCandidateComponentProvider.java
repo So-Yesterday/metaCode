@@ -309,6 +309,7 @@ public class ClassPathScanningCandidateComponentProvider implements EnvironmentC
 	 */
 	public Set<BeanDefinition> findCandidateComponents(String basePackage) {
 		if (this.componentsIndex != null && indexSupportsIncludeFilters()) {
+			// spring.components 索引
 			return addCandidateComponentsFromIndex(this.componentsIndex, basePackage);
 		}
 		else {
@@ -415,6 +416,7 @@ public class ClassPathScanningCandidateComponentProvider implements EnvironmentC
 	private Set<BeanDefinition> scanCandidateComponents(String basePackage) {
 		Set<BeanDefinition> candidates = new LinkedHashSet<>();
 		try {
+			// 包扫描路径下class 文件
 			String packageSearchPath = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX +
 					resolveBasePackage(basePackage) + '/' + this.resourcePattern;
 			Resource[] resources = getResourcePatternResolver().getResources(packageSearchPath);
@@ -426,8 +428,11 @@ public class ClassPathScanningCandidateComponentProvider implements EnvironmentC
 				}
 				if (resource.isReadable()) {
 					try {
+						// ASM类读取器
 						MetadataReader metadataReader = getMetadataReaderFactory().getMetadataReader(resource);
+						// excludeFilters 或者 includeFilters
 						if (isCandidateComponent(metadataReader)) {
+							// 构造对应的 ScannedGenericBeanDefinition
 							ScannedGenericBeanDefinition sbd = new ScannedGenericBeanDefinition(metadataReader);
 							sbd.setSource(resource);
 							if (isCandidateComponent(sbd)) {
@@ -510,6 +515,7 @@ public class ClassPathScanningCandidateComponentProvider implements EnvironmentC
 			this.conditionEvaluator =
 					new ConditionEvaluator(getRegistry(), this.environment, this.resourcePatternResolver);
 		}
+		// Conditional 条件判断
 		return !this.conditionEvaluator.shouldSkip(metadataReader.getAnnotationMetadata());
 	}
 
