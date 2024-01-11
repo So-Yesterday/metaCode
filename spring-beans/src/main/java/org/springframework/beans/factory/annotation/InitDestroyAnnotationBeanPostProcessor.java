@@ -48,6 +48,9 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.ReflectionUtils;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+
 /**
  * {@link org.springframework.beans.factory.config.BeanPostProcessor} implementation
  * that invokes annotated init and destroy methods. Allows for an annotation
@@ -152,6 +155,7 @@ public class InitDestroyAnnotationBeanPostProcessor
 
 	@Override
 	public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
+		// @post
 		LifecycleMetadata metadata = findLifecycleMetadata(bean.getClass());
 		try {
 			metadata.invokeInitMethods(bean, beanName);
@@ -226,9 +230,18 @@ public class InitDestroyAnnotationBeanPostProcessor
 		Class<?> targetClass = clazz;
 
 		do {
+			// 初始化方法
 			final List<LifecycleElement> currInitMethods = new ArrayList<>();
+			// 销毁方法
 			final List<LifecycleElement> currDestroyMethods = new ArrayList<>();
 
+
+//			public CommonAnnotationBeanPostProcessor() {
+//				setOrder(Ordered.LOWEST_PRECEDENCE - 3);
+//				setInitAnnotationType(PostConstruct.class);
+//				setDestroyAnnotationType(PreDestroy.class);
+//				ignoreResourceType("javax.xml.ws.WebServiceContext");
+//			}
 			ReflectionUtils.doWithLocalMethods(targetClass, method -> {
 				if (this.initAnnotationType != null && method.isAnnotationPresent(this.initAnnotationType)) {
 					LifecycleElement element = new LifecycleElement(method);

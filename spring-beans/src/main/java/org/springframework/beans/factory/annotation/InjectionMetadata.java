@@ -127,6 +127,7 @@ public class InjectionMetadata {
 				if (logger.isTraceEnabled()) {
 					logger.trace("Processing injected element of bean '" + beanName + "': " + element);
 				}
+				// AutowiredMethodElement AutowiredFieldElement &&  InjectionMetadata(@Resource)
 				element.inject(target, beanName, pvs);
 			}
 		}
@@ -273,6 +274,7 @@ public class InjectionMetadata {
 					return skip;
 				}
 				if (this.pd != null) {
+					// 手动设置了时,注入点方式直接跳过
 					if (pvs.contains(this.pd.getName())) {
 						// Explicit value provided as part of the bean definition.
 						this.skip = true;
