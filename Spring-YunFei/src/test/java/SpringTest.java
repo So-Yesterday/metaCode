@@ -9,8 +9,11 @@ public class SpringTest {
 
 		User user = (User) context.getBean("user");
 
+
+
 		System.out.println(user);
 
 
 	}
+
 }
