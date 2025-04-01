@@ -1,6 +1,9 @@
 buildscript {
 	repositories {
 		maven { url "https://repo.spring.io/plugins-release" }
+		maven { url "https://maven.aliyun.com/repository/public" }
+		maven { url "https://maven.aliyun.com/repository/central" }
+
 	}
 }
 
